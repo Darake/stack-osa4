@@ -38,6 +38,21 @@ test('a valid blog can be added', async () => {
   expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
 })
 
+test('a blog can be deleted', async () => {
+  const blogAtStart = await helper.blogsInDb()
+  const blogToDelete = blogAtStart[0]
+  await api
+    .delete(`/api/blogs/${blogToDelete._id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1)
+
+  const blogs = blogsAtEnd.map(b => b.title)
+  expect(blogs).not.toContain(blogToDelete.title)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
