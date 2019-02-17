@@ -27,6 +27,17 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test('a valid blog can be added', async () => {
+  await api
+    .post('/api/blogs')
+    .send(helper.extraBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

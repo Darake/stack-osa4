@@ -51,6 +51,13 @@ const initialBlogs = [
   }
 ]
 
+const extraBlog = {
+  title: 'Animals with ties',
+  author: 'Richard The Third',
+  url: 'http://blog.cowsandburgers.com',
+  likes: 5,
+}
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
@@ -58,5 +65,6 @@ const blogsInDb = async () => {
 
 module.exports = {
   blogsInDb,
-  initialBlogs
+  initialBlogs,
+  extraBlog
 }
