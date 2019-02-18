@@ -27,6 +27,11 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test('blogs are returned id as their identifier', async () => {
+  const res = await api.get('/api/blogs')
+  expect(res.body[0].id).toBeDefined()
+})
+
 test('a valid blog can be added', async () => {
   await api
     .post('/api/blogs')
@@ -42,7 +47,7 @@ test('a blog can be deleted', async () => {
   const blogAtStart = await helper.blogsInDb()
   const blogToDelete = blogAtStart[0]
   await api
-    .delete(`/api/blogs/${blogToDelete._id}`)
+    .delete(`/api/blogs/${blogToDelete.id}`)
     .expect(204)
 
   const blogsAtEnd = await helper.blogsInDb()
