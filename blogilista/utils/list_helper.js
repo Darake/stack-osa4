@@ -25,23 +25,29 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  if (blogs.length === 0) return {}
-
-  const authorsInOrder = _(blogs)
+  return _(blogs)
     .groupBy(b => b.author)
     .map((value, key) => ({ author: key, blogs: value }))
     .orderBy(b => b.blogs.length, 'desc')
+    .slice(0, 1)
     .value()
+    .map(b => ({ author: b.author, blogs: b.blogs.length }))[0] || {}
+}
 
-  return {
-    author: authorsInOrder[0].author,
-    blogs: authorsInOrder[0].blogs.length
-  }
+const mostLikes = (blogs) => {
+  return _(blogs)
+    .groupBy(b => b.author)
+    .map((value, key) => ({ author: key, likes: value.reduce((likeSum, blog) => {
+      return likeSum + blog.likes
+    }, 0) }))
+    .orderBy(b => b.likes, 'desc')
+    .value()[0] || {}
 }
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
