@@ -6,6 +6,19 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
+let token
+
+beforeAll(async () => {
+  await api
+    .post('/api/users')
+    .send(helper.newUser)
+
+  const res = await api
+    .post('/api/login')
+    .send({ username: 'daraku', password: 'salasana' })
+  token = res.body.token
+})
+
 beforeEach(async () => {
   await Blog.remove({})
 
@@ -35,6 +48,7 @@ test('blogs are returned id as their identifier', async () => {
 test('a valid blog can be added', async () => {
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
     .send(helper.extraBlog)
     .expect(200)
     .expect('Content-Type', /application\/json/)
@@ -56,6 +70,15 @@ test('a blog can be deleted', async () => {
 
   const blogs = blogsAtEnd.map(b => b.title)
   expect(blogs).not.toContain(blogToDelete.title)
+})
+
+test('if amount of likes not given then defaults as 0', async () => {
+  const res = await api
+    .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
+    .send(helper.blogWithoutLikes)
+
+  expect(res.body.likes).toBe(0)
 })
 
 afterAll(() => {

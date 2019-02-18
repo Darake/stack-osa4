@@ -15,15 +15,9 @@ describe('when there is initially one user at db', async () => {
   test('creation succeeds with a new username', async () => {
     const usersAtStart = await helper.usersInDb()
 
-    const newUser = {
-      username: 'daraku',
-      name: 'Gert Adamson',
-      password: 'salasana'
-    }
-
     await api
       .post('/api/users')
-      .send(newUser)
+      .send(helper.newUser)
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
@@ -31,6 +25,10 @@ describe('when there is initially one user at db', async () => {
     expect(usersAtEnd.length).toBe(usersAtStart.length + 1)
 
     const usernames = usersAtEnd.map(u => u.username)
-    expect(usernames).toContain(newUser.username)
+    expect(usernames).toContain(helper.newUser.username)
   })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
 })

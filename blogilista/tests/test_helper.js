@@ -70,6 +70,18 @@ const extraBlog = {
   likes: 5,
 }
 
+const blogWithoutLikes = {
+  title: 'The roundabouts of indonesia',
+  author: 'David Wallace',
+  url: 'www.dunfermifflin.com'
+}
+
+const newUser = {
+  username: 'daraku',
+  name: 'Gert Adamson',
+  password: 'salasana'
+}
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
@@ -85,5 +97,7 @@ module.exports = {
   usersInDb,
   initialBlogs,
   listWithOneBlog,
-  extraBlog
+  extraBlog,
+  blogWithoutLikes,
+  newUser
 }
