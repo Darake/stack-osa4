@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhcmFrdSIsImlkIjoiNWM2YTcyODBiYTA0MjkxZGYyNTFkNDc5IiwiaWF0IjoxNTUwNDk1NDQyfQ.BgZHa2RKS_Bf9l3OKxe2nt6ebqwitmd6uPcnJ1yoqYY
 
 {
-    "title": "Terve",
+    "title": "Toimiiko",
     "author": "Shady",
-    "url": "www.wuf.fi",
+    "url": "www.aaaa.fi",
     "likes": 8
 }
