@@ -28,33 +28,64 @@ beforeEach(async () => {
   }
 })
 
-test('right amount of blogs are returned', async () => {
-  const res = await api.get('/api/blogs')
-  expect(res.body.length).toBe(helper.initialBlogs.length)
+describe('when getting', () => {
+  test('right amount of blogs are returned', async () => {
+    const res = await api.get('/api/blogs')
+    expect(res.body.length).toBe(helper.initialBlogs.length)
+  })
+
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('blogs are returned id as their identifier', async () => {
+    const res = await api.get('/api/blogs')
+    expect(res.body[0].id).toBeDefined()
+  })
 })
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-})
+describe('when adding', () => {
+  test('a valid blog can be added', async () => {
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(helper.extraBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
-test('blogs are returned id as their identifier', async () => {
-  const res = await api.get('/api/blogs')
-  expect(res.body[0].id).toBeDefined()
-})
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+  })
 
-test('a valid blog can be added', async () => {
-  await api
-    .post('/api/blogs')
-    .set('Authorization', `Bearer ${token}`)
-    .send(helper.extraBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+  test('if amount of likes not given then defaults as 0', async () => {
+    const res = await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(helper.blogWithoutLikes)
 
-  const blogsAtEnd = await helper.blogsInDb()
-  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+    expect(res.body.likes).toBe(0)
+  })
+
+  describe('if blog does not contain required fields returns status 400', () => {
+    test('if blog does not contain title returns 400', async () => {
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(helper.blogWithoutTitle)
+        .expect(400)
+    })
+
+    test('if blog does not contain url returns 400', async () => {
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(helper.blogWithoutUrl)
+        .expect(400)
+    })
+  })
 })
 
 test('a blog can be deleted', async () => {
@@ -72,32 +103,7 @@ test('a blog can be deleted', async () => {
   expect(blogs).not.toContain(blogToDelete.title)
 })
 
-test('if amount of likes not given then defaults as 0', async () => {
-  const res = await api
-    .post('/api/blogs')
-    .set('Authorization', `Bearer ${token}`)
-    .send(helper.blogWithoutLikes)
 
-  expect(res.body.likes).toBe(0)
-})
-
-describe('if blog does not contain required fields returns status 400', () => {
-  test('if blog does not contain title returns 400', async () => {
-    await api
-      .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
-      .send(helper.blogWithoutTitle)
-      .expect(400)
-  })
-
-  test('if blog does not contain url returns 400', async () => {
-    await api
-      .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
-      .send(helper.blogWithoutUrl)
-      .expect(400)
-  })
-})
 
 afterAll(() => {
   mongoose.connection.close()
