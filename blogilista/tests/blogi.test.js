@@ -45,10 +45,16 @@ describe('blog with most likes', () => {
     __v: 0
   }
 
+  const blogOutput = {
+    title: favoriteBlog.title,
+    author: favoriteBlog.author,
+    likes: favoriteBlog.likes
+  }
+
   const blogs = testHelper.initialBlogs.concat(favoriteBlog)
 
   test('is normally right', () => {
-    expect(listHelper.favoriteBlog(blogs)).toEqual(favoriteBlog)
+    expect(listHelper.favoriteBlog(blogs)).toEqual(blogOutput)
   })
 
   test('is an empty object when argument is an empty array', () => {
