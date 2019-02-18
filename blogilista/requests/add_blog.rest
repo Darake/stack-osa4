@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Fantasia",
-    "author": "Esa",
-    "url": "www.sormus.fi",
-    "likes": 44
+    "title": "Terve",
+    "author": "Shady",
+    "url": "www.wuf.fi",
+    "likes": 8
 }
