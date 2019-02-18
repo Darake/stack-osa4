@@ -81,6 +81,24 @@ test('if amount of likes not given then defaults as 0', async () => {
   expect(res.body.likes).toBe(0)
 })
 
+describe('if blog does not contain required fields returns status 400', () => {
+  test('if blog does not contain title returns 400', async () => {
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(helper.blogWithoutTitle)
+      .expect(400)
+  })
+
+  test('if blog does not contain url returns 400', async () => {
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
+      .send(helper.blogWithoutUrl)
+      .expect(400)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

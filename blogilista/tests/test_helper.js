@@ -76,6 +76,18 @@ const blogWithoutLikes = {
   url: 'www.dunfermifflin.com'
 }
 
+const blogWithoutTitle = {
+  author: 'Richard The Third',
+  url: 'http://blog.cowsandburgers.com',
+  likes: 5,
+}
+
+const blogWithoutUrl = {
+  title: 'Animals with ties',
+  author: 'Richard The Third',
+  likes: 5,
+}
+
 const newUser = {
   username: 'daraku',
   name: 'Gert Adamson',
@@ -99,5 +111,7 @@ module.exports = {
   listWithOneBlog,
   extraBlog,
   blogWithoutLikes,
-  newUser
+  newUser,
+  blogWithoutTitle,
+  blogWithoutUrl
 }

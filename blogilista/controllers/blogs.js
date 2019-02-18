@@ -18,6 +18,10 @@ const getTokenFrom = request => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
+  if (!(body.title && body.url)) {
+    return response.status(400).json({ error: 'title or url missing' })
+  }
+
   const token = getTokenFrom(request)
 
   try {
