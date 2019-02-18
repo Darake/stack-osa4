@@ -34,3 +34,24 @@ describe('total likes', () => {
     expect(listHelper.totalLikes(blogs)).toBe(36)
   })
 })
+
+describe('blog with most likes', () => {
+  const favoriteBlog = {
+    _id: '5a422aa71b54a676234d17f9',
+    title: 'Best blog ever',
+    author: 'Bloginston',
+    url: 'www.awesome.com',
+    likes: 1337,
+    __v: 0
+  }
+
+  const blogs = testHelper.initialBlogs.concat(favoriteBlog)
+
+  test('is normally right', () => {
+    expect(listHelper.favoriteBlog(blogs)).toEqual(favoriteBlog)
+  })
+
+  test('is an empty object when argument is an empty array', () => {
+    expect(listHelper.favoriteBlog([])).toEqual({})
+  })
+})
