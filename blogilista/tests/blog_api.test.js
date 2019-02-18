@@ -103,6 +103,22 @@ test('a blog can be deleted', async () => {
   expect(blogs).not.toContain(blogToDelete.title)
 })
 
+test('a blog can be updated', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogAtStart = blogsAtStart[0]
+  await api
+    .put(`/api/blogs/${blogAtStart.id}`)
+    .send({
+      title: blogAtStart.title,
+      author: blogAtStart.author,
+      url: blogAtStart.url,
+      likes: blogAtStart.likes + 1
+    })
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const blogAtEnd = blogsAtEnd[0]
+  expect(blogAtEnd.likes).toBe(blogAtStart.likes + 1)
+})
 
 
 afterAll(() => {
